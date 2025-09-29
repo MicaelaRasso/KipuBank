@@ -14,7 +14,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "_maxWithdrawl",
+						"name": "_maxWithdrawal",
 						"type": "uint256"
 					}
 				],
@@ -22,16 +22,90 @@
 				"type": "constructor"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "error",
+						"type": "bytes"
+					}
+				],
+				"name": "KipuBank_FailedDeposit",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "error",
+						"type": "bytes"
+					}
+				],
+				"name": "KipuBank_FailedOperation",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "error",
+						"type": "bytes"
+					}
+				],
+				"name": "KipuBank_FailedWithdrawal",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "error",
+						"type": "bytes"
+					}
+				],
+				"name": "KipuBank_InsufficientFounds",
+				"type": "error"
+			},
+			{
 				"anonymous": false,
-				"inputs": [],
-				"name": "KipuBank_FailedTransaction",
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "KipuBank_SuccessfulDeposit",
 				"type": "event"
 			},
 			{
 				"anonymous": false,
-				"inputs": [],
-				"name": "KipuBank_SuccessfulTransaction",
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "KipuBank_SuccessfulWithdrawal",
 				"type": "event"
+			},
+			{
+				"stateMutability": "nonpayable",
+				"type": "fallback"
 			},
 			{
 				"inputs": [],
@@ -44,6 +118,32 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"name": "consultFounds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "deposit",
+				"outputs": [],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -103,16 +203,54 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "withdrawal",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
 			}
 		],
 		"devdoc": {
 			"kind": "dev",
 			"methods": {},
+			"stateVariables": {
+				"s_actualAmount": {
+					"details": "Tracks the actual Ether amount currently stored in the contract."
+				}
+			},
 			"version": 1
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"bankCap()": {
+					"notice": "Maximum Ether capacity that the bank can hold."
+				},
+				"maxWithdrawal()": {
+					"notice": "Maximum allowed withdrawal amount per transaction."
+				},
+				"s_balances(address)": {
+					"notice": "Mapping of user address to their balance in the bank."
+				},
+				"s_totalDeposits()": {
+					"notice": "Total number of deposits made in the bank."
+				},
+				"s_totalWithdrawals()": {
+					"notice": "Total number of withdrawals made in the bank."
+				}
+			},
 			"version": 1
 		}
 	},
@@ -133,11 +271,11 @@
 	},
 	"sources": {
 		"contracts/KipuBank.sol": {
-			"keccak256": "0xd52a846cbe6c345e9872b4d1490f3af7f8a4b7dfe77512868de5f09d18b47f65",
+			"keccak256": "0xb5f42cb3af58131d36f3920e1d57a7656cb7aa150abd6f3aaf44bf9a0eae8d40",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4231dc88afae805221cc140d464fc5fd6eef24c6e9c6cab6041b0958bfa1b9e5",
-				"dweb:/ipfs/QmWWWHBwzWmwvNqbKM5g8KxH4Dnh43qfQy6aL8jTjzXNAn"
+				"bzz-raw://eaf26f02421e687c8c061b3a237a76aa25548743b42351f055baea98b88bf99a",
+				"dweb:/ipfs/QmapiDjdrD9LuXZwHbHoaEMVubxxzRJ4Vt8oCVRdfy2zz2"
 			]
 		}
 	},
