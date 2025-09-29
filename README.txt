@@ -1,28 +1,50 @@
-REMIX DEFAULT WORKSPACE
+# KipuBank
 
-Remix default workspace is present when:
-i. Remix loads for the very first time 
-ii. A new workspace is created with 'Default' template
-iii. There are no files existing in the File Explorer
+## Descripción
+**KipuBank** es un contrato inteligente educativo en Solidity que simula un banco simple en Ethereum.  
+Permite a los usuarios depositar y retirar Ether, mientras se aplican límites máximos de capacidad del banco y de retiro por transacción.  
 
-This workspace contains 3 directories:
+El contrato incluye:  
+- Control de saldos individuales de los usuarios.  
+- Registro del número total de depósitos y retiros realizados.  
+- Eventos para monitorear depósitos y retiros exitosos.  
+- Manejo de errores para operaciones fallidas, fondos insuficientes y exceder límites.  
+- Funciones de consulta de fondos totales en el banco.  
 
-1. 'contracts': Holds three contracts with increasing levels of complexity.
-2. 'scripts': Contains four typescript files to deploy a contract. It is explained below.
-3. 'tests': Contains one Solidity test file for 'Ballot' contract & one JS test file for 'Storage' contract.
+------
 
-SCRIPTS
+## Despliegue
+Para desplegar `KipuBank` en una testnet Ethereum (como Sepolia):
+1. Clona o descarga el proyecto.  
+2. Utiliza un entorno de desarrollo Ethereum listo, como **Remix**.  
+3. Configura los parámetros del constructor:
+   - `_bankCap`: Capacidad máxima del banco (en ETH).  
+   - `_maxWithdrawal`: Monto máximo permitido por retiro (en ETH).  
+4. Compila y despliega el contrato en la red deseada.
+5. Una vez desplegado, copia la dirección del contrato para interactuar con él.
 
-The 'scripts' folder has four typescript files which help to deploy the 'Storage' contract using 'web3.js' and 'ethers.js' libraries.
 
-For the deployment of any other contract, just update the contract name from 'Storage' to the desired contract and provide constructor arguments accordingly 
-in the file `deploy_with_ethers.ts` or  `deploy_with_web3.ts`
+------
 
-In the 'tests' folder there is a script containing Mocha-Chai unit tests for 'Storage' contract.
 
-To run a script, right click on file name in the file explorer and click 'Run'. Remember, Solidity file must already be compiled.
-Output from script will appear in remix terminal.
+##Interacción con el contrato
+Funciones principales:
+1. Depositar Ether: deposit() external payable
+    → Envía Ether al contrato desde la cuenta que llama a la función.
+2. Retirar Ether: withdrawal(uint256 amount) external
+    → amount: Cantidad de Ether a retirar.
+    → Requiere que el monto sea menor al límite máximo y que el usuario tenga saldo suficiente.
+    → Emite el evento KipuBank_SuccessfulWithdrawal si es exitoso.
+3. Consultar saldo total del banco: consultKipuBankFounds() public view returns (uint256)
+    → Retorna el total de Ether actualmente almacenado en el contrato.
 
-Please note, require/import is supported in a limited manner for Remix supported modules.
-For now, modules supported by Remix are ethers, web3, swarmgw, chai, multihashes, remix and hardhat only for hardhat.ethers object/plugin.
-For unsupported modules, an error like this will be thrown: '<module_name> module require is not supported by Remix IDE' will be shown.
+Eventos importantes:
+1. KipuBank_SuccessfulDeposit(address receiver, uint256 amount) → Emitido cuando un depósito se realiza correctamente.
+2. KipuBank_SuccessfulWithdrawal(address receiver, uint256 amount) → Emitido cuando un retiro se realiza correctamente.
+
+Manejo de errores:
+1. KipuBank_FailedWithdrawal(bytes error) → Cuando un retiro falla.
+2. KipuBank_FailedDeposit(bytes error) → Cuando un depósito excede la capacidad máxima.
+3. KipuBank_InsufficientFounds(bytes error) → Cuando no hay saldo suficiente.
+4. KipuBank_FailedOperation(bytes error) → Cuando se llama a una función inexistente o incorrecta.
+
